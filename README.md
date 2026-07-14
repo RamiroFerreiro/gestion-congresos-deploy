@@ -191,3 +191,44 @@ gestion-congresos-deploy
 * MySQL se expone en el puerto **3307** del equipo anfitrión y utiliza el puerto **3306** dentro del contenedor.
 * El backend no se comunica con MySQL mediante `localhost`, sino utilizando el nombre del servicio definido en `docker-compose.yml`.
 * El archivo `.env` no debe subirse al repositorio. Cada integrante del equipo debe crear su propia copia a partir de `.env.example`.
+
+
+# Arquitectura del Proyecto
+
+```mermaid
+flowchart TB
+
+    subgraph PC["💻 Host (PC)"]
+
+        Browser["🌐 Navegador
+localhost:5173"]
+
+        Postman["📮 Postman"]
+
+        Workbench["🛠 MySQL Workbench
+localhost:3307"]
+
+        subgraph Docker["🐳 Docker Network"]
+
+            Front["⚛️ Frontend
+React + Vite
+:5173"]
+
+            Back["☕ Backend
+Spring Boot
+:8080"]
+
+            DB["🗄 MySQL
+:3306"]
+
+        end
+    end
+
+    Browser --> Front
+    Front -->|HTTP REST| Back
+    Postman -->|HTTP REST| Back
+    Back -->|JDBC| DB
+    Workbench -->|3307 → 3306| DB
+
+    style Docker fill:#E8F5E9,stroke:#2E7D32,stroke-width:5px
+```

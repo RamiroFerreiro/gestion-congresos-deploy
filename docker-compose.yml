@@ -50,6 +50,22 @@ services:
     networks:
       - gestion-congresos-network
 
+  frontend:
+    build:
+      context: ../gestion-congresos-frontend
+      dockerfile: Dockerfile
+
+    container_name: gestion-congresos-frontend
+
+    ports:
+      - "5173:5173"
+
+    depends_on:
+      - backend
+
+    networks:
+      - gestion-congresos-network
+
 volumes:
   mysql_data:
 
