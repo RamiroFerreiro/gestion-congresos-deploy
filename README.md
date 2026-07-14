@@ -8,8 +8,9 @@ Este repositorio contiene la configuración necesaria para ejecutar los servicio
 
 Actualmente se incluyen los siguientes servicios:
 
-* Backend (Spring Boot)
-* Base de datos MySQL 8.4
+- Frontend (React + Vite)
+- Backend (Spring Boot)
+- Base de datos MySQL 8.4
 
 El objetivo es que cualquier integrante del equipo pueda clonar el repositorio y levantar el entorno completo con un único comando.
 
@@ -31,10 +32,35 @@ docker compose version
 
 ---
 
-# Clonar el repositorio
+# Clonar los repositorios
+
+El proyecto está compuesto por tres repositorios independientes:
+
+- gestion-congresos-backend
+- gestion-congresos-frontend
+- gestion-congresos-deploy
+
+Se recomienda mantener la siguiente estructura de carpetas:
+
+```text
+Proyecto TFI/
+│
+├── gestion-congresos-backend
+├── gestion-congresos-frontend
+└── gestion-congresos-deploy
+```
+
+Clonar cada repositorio:
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone <URL_BACKEND>
+git clone <URL_FRONTEND>
+git clone <URL_DEPLOY>
+```
+
+Ingresar al repositorio de despliegue:
+
+```bash
 cd gestion-congresos-deploy
 ```
 
@@ -57,13 +83,21 @@ MYSQL_ROOT_PASSWORD=tu_root_password
 
 # Levantar el entorno
 
-Construir las imágenes e iniciar los contenedores:
+Una vez descargados los tres repositorios y configurado el archivo `.env`, ejecutar desde el repositorio **gestion-congresos-deploy**:
 
 ```bash
 docker compose up --build
 ```
 
-Para ejecutar los contenedores en segundo plano:
+Este comando realizará automáticamente:
+
+- Construcción de la imagen del Frontend.
+- Construcción de la imagen del Backend.
+- Creación de la red Docker.
+- Creación del contenedor MySQL.
+- Inicio de todos los servicios.
+
+Para ejecutar en segundo plano:
 
 ```bash
 docker compose up -d --build
@@ -104,9 +138,13 @@ Ejemplo de endpoint de prueba:
 ```
 http://localhost:8080/api/users/test
 ```
+## Frontend (React + Vite)
 
----
+URL:
 
+```
+http://localhost:5173
+```
 ## Base de datos MySQL
 
 Desde MySQL Workbench:
@@ -178,10 +216,11 @@ gestion-congresos-deploy
 
 # Tecnologías utilizadas
 
-* Docker
-* Docker Compose
-* Spring Boot
-* MySQL 8.4
+- Docker
+- Docker Compose
+- React + Vite
+- Spring Boot
+- MySQL 8.4
 
 ---
 
@@ -191,12 +230,14 @@ gestion-congresos-deploy
 * MySQL se expone en el puerto **3307** del equipo anfitrión y utiliza el puerto **3306** dentro del contenedor.
 * El backend no se comunica con MySQL mediante `localhost`, sino utilizando el nombre del servicio definido en `docker-compose.yml`.
 * El archivo `.env` no debe subirse al repositorio. Cada integrante del equipo debe crear su propia copia a partir de `.env.example`.
+* El frontend se expone en el puerto **5173**.
 
 
 # Arquitectura del Proyecto
 
 ```mermaid
 flowchart TB
+linkStyle default stroke:#1976D2,stroke-width:2.5px
 
     subgraph PC["💻 Host (PC)"]
 
@@ -230,5 +271,5 @@ Spring Boot
     Back -->|JDBC| DB
     Workbench -->|3307 → 3306| DB
 
-    style Docker fill:#E8F5E9,stroke:#2E7D32,stroke-width:5px
+    style Docker fill:#C8E6C9,stroke:#1B5E20,stroke-width:5px,color:#000
 ```
